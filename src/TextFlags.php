@@ -7,12 +7,12 @@ use Illuminate\Support\Arr;
 
 class TextFlags
 {
-    public $models        = [];
-    public $modelKeys     = [];    
-    public $textsBag      = [];
-    public $regExpModels  = [];    
-    public $flagWrap      = ['{','}'];
-    public $detectedFlags = [];
+    protected $models        = [];
+    protected $modelKeys     = [];    
+    protected $textsBag      = [];
+    protected $regExpModels  = [];    
+    protected $flagWrap      = ['{','}'];
+    protected $detectedFlags = [];
     public $output        = [];
     
 
