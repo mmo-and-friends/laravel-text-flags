@@ -147,6 +147,9 @@ class TextFlags
 
     /**
      * Replace flags of the input text
+     * 
+     * @param boolean $reset Reset all attributes except the output
+     * @return array|string
      */
     public function apply($reset = true)
     {
@@ -175,7 +178,7 @@ class TextFlags
             return $this->output[0];
         }
 
-        return $this->output;
+        return array_values($this->output);
     }
 
 
