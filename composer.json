@@ -1,6 +1,6 @@
 {
     "name": "mmo-and-friends/laravel-text-flags",
-    "description": "A laravel package for replace flags in a text by eloquent or array or object values",
+    "description": "A Laravel package to replace flags found in the text with array values ​​or objects",
     "type": "library",
     "license": "MIT",
     "autoload": {
@@ -10,7 +10,7 @@
     },
     "authors": [
         {
-            "name": "Guillermo Rodriguez",
+            "name": "Mmo&Friends",
             "email": "mmo.and.friends@gmail.com"
         }
     ],
