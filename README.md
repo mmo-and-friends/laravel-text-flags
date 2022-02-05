@@ -36,7 +36,7 @@ class HomeController extends Controller
             'contact_info' => [
                 'organization'  => 'Mmo&Friends',
                 'manager_name'  => 'Guillermo Rodriguez'
-                'manager_email' => 'mmo.and.friends@gmail.com',
+                'manager_email' => 'guillermo.rod.dev@gmail.com',
             ]
         ]);
 
