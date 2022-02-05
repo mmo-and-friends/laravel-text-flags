@@ -22,44 +22,9 @@ class HomeController extends Controller
     // For capture the flags you need use the syntax: "{model:attribute}" or "{model:attribute.relation.attribute}"
     //
 
-   
-    /**
-     * In some cases you need that the users uploads an custom format for a ticket, pdf, etc,,,
-     * 
-     * But use the blade engine can be dangerous for sql injections or query statements with the @php directive,
-     * so that was the reason for i create this package
-     * 
-     * In this way you can return the custom user format (html) with the real value to the pdf api or do that you need
-     * 
-     * @return string
-     */
-    public function saleTicket($token)
-    {     
-        $saleTicket = \App\Models\SaleTicket::select('id','note','format_id')
-                            ->with('order')
-                            ->with('contact')
-                            ->where('token',$token)
-                            ->first();
-
-        
-        $customFormatPath = $saleTicket->getHtmlFormatView();
-        $html             = view($customFormatPath)->render();
-
-        // Filling the text flags with the values
-
-        $textFlags = TextFlags::fill([
-            'ticket'  => $saleTicket,
-            'contact' => $saleTicket->contact,
-        ]);
-
-        // Reading the full html and return after apply the values
-        
-        return $textFlags->read($html)->apply();
-    }
-
 
     /**
-     * Or maybe you need returns a partial html
+     * Maybe you need returns a partial html
      * 
      * @return \Illuminate\Response
      */
@@ -91,18 +56,48 @@ class HomeController extends Controller
         ]);
     }
 
+   
+    /**
+     * Or in some cases you need that the users uploads an custom format for a ticket, pdf, etc,,,
+     * 
+     * But use the blade engine can be dangerous for sql injections or query statements with the @php directive,
+     * so that was the reason for i create this package
+     * 
+     * In this way you can return the custom user format (html) with the real value to the pdf api or do what you need
+     * 
+     * @return string
+     */
+    public function saleTicket($token)
+    {     
+        $saleTicket = \App\Models\SaleTicket::select('id','note','format_id')
+                            ->with('order')
+                            ->with('contact')
+                            ->where('token',$token)
+                            ->first();
+
+        
+        $customFormatPath = $saleTicket->getHtmlFormatView();
+        $html             = view($customFormatPath)->render();
+
+        // Filling the text flags with the values
+
+        $textFlags = TextFlags::fill([
+            'ticket'  => $saleTicket,
+            'contact' => $saleTicket->contact,
+        ]);
+
+        // Reading the full html and return after apply the values
+        
+        return $textFlags->read($html)->apply();
+    }
 }
 
 ```
 
-## Autores ✒️
+## Author ✒️
 
 _Guillermo Rodriguez / guillermo.rod.dev@gmail.com_
 
-## Licencia 📄
+## License 📄
 
 This project is under the license (MIT) - Look the file [LICENSE.md](LICENSE.md).
-
-## Expresiones de Gratitud 🎁
-
-* If the project has been useful to you, share it. 📢
