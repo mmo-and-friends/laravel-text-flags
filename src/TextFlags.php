@@ -4,8 +4,8 @@ namespace MmoAndFriends\LaravelTextFlags;
 
 use Exception;
 use Illuminate\Support\Arr;
-use MmoAndFriends\LaravelTextFlags\Parsers\EachParser;
-use MmoAndFriends\LaravelTextFlags\Parsers\GlobalParser;
+use MmoAndFriends\LaravelTextFlags\Compilers\EachCompiler;
+use MmoAndFriends\LaravelTextFlags\Compilers\GlobalCompiler;
 
 class TextFlags
 {
@@ -19,10 +19,10 @@ class TextFlags
 
     public function __construct()
     {
-        $this->reservedWords = array_merge(EachParser::RESERVED_WORDS);
+        $this->reservedWords = array_merge(EachCompiler::RESERVED_WORDS);
         $this->parsers = [
-            'global' => new GlobalParser($this),
-            'each'   => new EachParser($this)
+            'global' => new GlobalCompiler($this),
+            'each'   => new EachCompiler($this)
         ];
     }
 
@@ -53,7 +53,7 @@ class TextFlags
         
         $this->modelKeys = array_keys($this->models);
         
-        $this->forEachParser('buildRegExp');
+        $this->foreEachCompiler('buildRegExp');
 
         return $this;
     }
@@ -74,7 +74,7 @@ class TextFlags
         $this->subjectsBag   = Arr::flatten($this->subjectsBag);
 
         foreach ($this->subjectsBag as $subject) {            
-            $this->forEachParser('match', $subject);
+            $this->foreEachCompiler('match', $subject);
         }
 
         $this->output = $this->subjectsBag;
@@ -90,10 +90,10 @@ class TextFlags
      */
     public function apply($reset = true)
     {
-        $this->forEachParser('apply');
+        $this->foreEachCompiler('apply');
         
         if ($reset) {
-            $this->forEachParser('reset');            
+            $this->foreEachCompiler('reset');            
         }
         
         if (count($this->output) == 1) {
@@ -118,7 +118,7 @@ class TextFlags
         }else if (is_array($obj)) {
             $_value = Arr::get($obj, $attribute, $default ?? []);
         }elseif(strpos($attribute, '.') !== false){
-            $_value = object_get($obj, $attribute, $default); //array_reduce(explode('.', $attribute), function ($o, $attr) { return $o->$attr; }, $obj);
+            $_value = function_exists('object_get') ? object_get($obj, $attribute, $default) : array_reduce(explode('.', $attribute), function ($o, $attr) { return $o->$attr; }, $obj);
         }else{
             $_value = $obj->{$attribute};
         }
@@ -135,7 +135,7 @@ class TextFlags
         throw new Exception("TextFlags[{$fnName}] {$message}", $code);      
     }
 
-    public function forEachParser($callAcction, ...$args)
+    public function foreEachCompiler($callAcction, ...$args)
     {
         foreach ($this->parsers as $parser) {
             $parser->{$callAcction}(...$args);
@@ -168,5 +168,4 @@ class TextFlags
     {
         return $this->modelKeys;
     }
-
 }

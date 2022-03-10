@@ -1,6 +1,6 @@
 <?php
 
-namespace MmoAndFriends\LaravelTextFlags\Parsers;
+namespace MmoAndFriends\LaravelTextFlags\Compilers;
 
 use MmoAndFriends\LaravelTextFlags\TextFlags;
 

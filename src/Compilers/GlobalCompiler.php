@@ -1,11 +1,11 @@
 <?php
 
-namespace MmoAndFriends\LaravelTextFlags\Parsers;
+namespace MmoAndFriends\LaravelTextFlags\Compilers;
 
 use Illuminate\Support\Arr;
 use MmoAndFriends\LaravelTextFlags\TextFlags;
 
-class GlobalParser implements ParserContract
+class GlobalCompiler implements ParserContract
 {
 
     /**
