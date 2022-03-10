@@ -37,28 +37,47 @@ class HomeController extends Controller
                 'organization'  => 'Mmo&Friends',
                 'manager_name'  => 'Guillermo Rodriguez'
                 'manager_email' => 'guillermo.rod.dev@gmail.com',
+            ],
+            'items' => [
+                [
+                    'name' => 'Some book',
+                    'price' => 450, 
+                    'category' => [
+                        'name' => 'Books'
+                    ]
+                ],
+                [
+                    'name' => 'Other book',
+                    'price' => 340, 
+                    'category' => [
+                        'name' => 'Books'
+                    ]
+                ]
             ]
         ]);
 
         // Reading the text
 
-        $contactInfo = $textFlags->read('        
+        $html = $textFlags->read('        
             <div class="card contact-info">
                 <p>Organization: {contact_info:organization}</p>
                 <p>Manager: {contact_info:manager_name}</p>
                 <p>Manager Email: {contact_info:manager_email}</p>
             </div>
+            <ol>
+                {each:items}
+                    <li>{each_v:name} | ${each_v:price} | {each_v:category.name}</li>
+                {end_each:items}
+            </ol>
         ')
         ->apply();
 
-        return response()->json([
-            'contact_info' => $contactInfo
-        ]);
+        return $html;
     }
 
    
     /**
-     * Or in some cases you need that the users uploads an custom format for a ticket, pdf, etc,,,
+     * In some cases you need that the users uploads an custom format for a ticket, pdf, etc,,,
      * 
      * But use the blade engine can be dangerous for sql injections or query statements with the @php directive,
      * so that was the reason for i create this package
@@ -67,23 +86,32 @@ class HomeController extends Controller
      * 
      * @return string
      */
-    public function saleTicket($token)
+    public function getSaleTicket($token)
     {     
         $saleTicket = \App\Models\SaleTicket::select('id','note','format_id')
-                            ->with('order')
-                            ->with('contact')
-                            ->where('token',$token)
-                            ->first();
-
+                        ->with('order.products')
+                        ->with('contact')
+                        ->where('token',$token)
+                        ->first();
         
-        $customFormatPath = $saleTicket->getHtmlFormatView();
-        $html             = view($customFormatPath)->render();
+        $html = $saleTicket->getHtmlFormatView();
+
+        // Hiding some data null|unset
+
+        $saleTicket->important_attribute = null;
+        unset($saleTicket->important_attribute);
+
+        //Adding some default styles {ticket:styles.table} {ticket:styles.button}
+
+        $saleTicket->styles = [
+            'table'  => 'padding: 10px; border: 1px solid',
+            'button' => 'rounded: 8px; border: 1px solid blue; background-color:blue; color: white',
+        ];
 
         // Filling the text flags with the values
 
         $textFlags = TextFlags::fill([
-            'ticket'  => $saleTicket,
-            'contact' => $saleTicket->contact,
+            'ticket' => $saleTicket,
         ]);
 
         // Reading the full html and return after apply the values
