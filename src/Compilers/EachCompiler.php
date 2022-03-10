@@ -4,7 +4,7 @@ namespace MmoAndFriends\LaravelTextFlags\Compilers;
 
 use MmoAndFriends\LaravelTextFlags\TextFlags;
 
-class EachCompiler implements ParserContract
+class EachCompiler implements CompilerContract
 {
     /**
      * Handler

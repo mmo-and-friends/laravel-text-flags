@@ -5,7 +5,7 @@ namespace MmoAndFriends\LaravelTextFlags\Compilers;
 use Illuminate\Support\Arr;
 use MmoAndFriends\LaravelTextFlags\TextFlags;
 
-class GlobalCompiler implements ParserContract
+class GlobalCompiler implements CompilerContract
 {
 
     /**

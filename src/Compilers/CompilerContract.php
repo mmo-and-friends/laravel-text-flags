@@ -4,8 +4,7 @@ namespace MmoAndFriends\LaravelTextFlags\Compilers;
 
 use MmoAndFriends\LaravelTextFlags\TextFlags;
 
-interface ParserContract{
-
+interface CompilerContract{
     function __construct(TextFlags &$handler);
     function buildRegExp();
     function match($subject);
