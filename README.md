@@ -44,9 +44,9 @@ class HomeController extends Controller
 
         $contactInfo = $textFlags->read('        
             <div class="card contact-info">
-                <p>Organization: {contact_info.organization}</p>
-                <p>Manager: {contact_info.manager_name}</p>
-                <p>Manager Email: {contact_info.manager_email}</p>
+                <p>Organization: {contact_info:organization}</p>
+                <p>Manager: {contact_info:manager_name}</p>
+                <p>Manager Email: {contact_info:manager_email}</p>
             </div>
         ')
         ->apply();
